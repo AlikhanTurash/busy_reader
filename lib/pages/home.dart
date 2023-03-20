@@ -1,4 +1,5 @@
 import 'package:busy_reader/pages/books.dart';
+import 'package:busy_reader/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,8 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+bool appBarVisible = true;
 
 class _HomePageState extends State<HomePage> {
   int _currentSelectedScreen = 0;
@@ -28,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     ),
     Container(
       child: const Center(
-        child: Text("Profile"),
+        child: ProfilePage(),
       ),
     ),
   ];
@@ -36,29 +39,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xffFFFFFF),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.black,
-        title: Text(
-          "Рекомендации",
-          style: GoogleFonts.mulish(fontSize: 20, fontWeight: FontWeight.w700),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Center(
-                child: Text(
-              "Все книги",
-              style: GoogleFonts.mulish(
-                  color: const Color(0xff8C8C8C),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600),
-            )),
-          )
-        ],
-      ),
+      appBar: appBarVisible == true
+          ? AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              foregroundColor: Colors.black,
+              title: Text(
+                "Рекомендации",
+                style: GoogleFonts.mulish(
+                    fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Center(
+                      child: Text(
+                    "Все книги",
+                    style: GoogleFonts.mulish(
+                        color: const Color(0xff8C8C8C),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                  )),
+                )
+              ],
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -88,6 +95,11 @@ class _HomePageState extends State<HomePage> {
         onTap: (value) {
           setState(() {
             _currentSelectedScreen = value;
+            if (value < 3) {
+              appBarVisible = true;
+            } else {
+              appBarVisible = false;
+            }
           });
         },
         currentIndex: _currentSelectedScreen,
